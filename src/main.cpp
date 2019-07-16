@@ -70,13 +70,13 @@ std::ostream& operator<<(std::ostream& os,figure c)
 {
     switch(c)
     {
-        case CARD_9   : os << "_9";    break;
-        case CARD_10: os << "_10"; break;
-        case CARD_J : os << "_J";  break;
-        case CARD_Q  : os << "_Q";   break;
-        case CARD_K  : os << "_K";   break;
-        case CARD_A  : os << "_A";   break;
-        default    : os << "_CARD_UNDEFINED";
+        case CARD_9   : os << "9";    break;
+        case CARD_10: os << "10"; break;
+        case CARD_J : os << "J";  break;
+        case CARD_Q  : os << "Q";   break;
+        case CARD_K  : os << "K";   break;
+        case CARD_A  : os << "A";   break;
+        default    : os << "CARD_UNDEFINED";
     }
     return os;
 }
@@ -139,6 +139,16 @@ std::vector<Card> Game::getShuffledDeck()
 	return this->shuffledCards;
 }
 
+class Player
+{
+private:
+	std::vector<Card> deck;
+public:
+	Player();
+	void setDeck(std::vector<Card> cards);
+
+};
+
 int main()
 {
     Card * deck = new Card[24];
@@ -163,7 +173,7 @@ int main()
 	auto gameDeck = g.getShuffledDeck();
 	for(auto i = gameDeck.begin(); i < gameDeck.end(); i++)
 	{
-		std::cout << i->colo << i->fig << std::endl;
+		std::cout << i->colo << "\t" << i->fig << std::endl;
 	}
 	std::cout << std::endl;
     return 0;
