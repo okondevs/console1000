@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 enum figure
 {
@@ -21,25 +23,25 @@ enum color
 };
 
 class Card{
-    public: 
+    public:
         figure fig;
         color colo;
         int value;
-    
+
     Card()
     {
         fig = CARD_UNDEFINED;
         colo = COLOR_UNDEFINED;
         value = -1;
     }
-    
+
     Card(figure f, color c)
     {
         fig = f;
         colo = c;
         initValue();
     }
-    
+
     void initValue()
     {
         if(fig == CARD_10) value = 10;
@@ -49,7 +51,6 @@ class Card{
         else if(fig == CARD_A) value = 11;
         else value = 0;
     }
-    
 };
 
 std::ostream& operator<<(std::ostream& os, color f)
@@ -80,6 +81,64 @@ std::ostream& operator<<(std::ostream& os,figure c)
     return os;
 }
 
+
+class Game
+{
+public:
+	Game(unsigned noPlayers);
+	void shuffle();
+	void giveCards();
+	std::vector<Card> getShuffledDeck();
+
+private:
+	unsigned numberOfPlayers;
+	std::vector<Card> availableCards;
+	std::vector<Card> shuffledCards;
+};
+
+Game::Game(unsigned noPlayers):
+	numberOfPlayers(noPlayers)
+{
+	this->availableCards = {
+		Card(CARD_9, PIK),
+		Card(CARD_10, PIK),
+		Card(CARD_J, PIK),
+		Card(CARD_Q, PIK),
+		Card(CARD_K, PIK),
+		Card(CARD_A, PIK),
+		Card(CARD_9, KIER),
+		Card(CARD_10, KIER),
+		Card(CARD_J, KIER),
+		Card(CARD_Q, KIER),
+		Card(CARD_K, KIER),
+		Card(CARD_A, KIER),
+		Card(CARD_9, TREFL),
+		Card(CARD_10, TREFL),
+		Card(CARD_J, TREFL),
+		Card(CARD_Q, TREFL),
+		Card(CARD_K, TREFL),
+		Card(CARD_A, TREFL),
+		Card(CARD_9, KARO),
+		Card(CARD_10, KARO),
+		Card(CARD_J, KARO),
+		Card(CARD_Q, KARO),
+		Card(CARD_K, KARO),
+		Card(CARD_A, KARO)
+	};
+}
+
+void Game::shuffle()
+{
+//	this->shuffledCards.reserve(this->availableCards.size());
+	std::copy(this->availableCards.begin(), this->availableCards.end(), std::back_inserter(this->shuffledCards));
+	std::random_shuffle(this->shuffledCards.begin(), this->shuffledCards.end());
+}
+
+std::vector<Card> Game::getShuffledDeck()
+{
+	return this->shuffledCards;
+}
+
 int main()
 {
     Card * deck = new Card[24];
@@ -92,11 +151,20 @@ int main()
             position++;
         }
     }
-    
-    for(unsigned i = 0; i<24; i++)
+	std::cout << "############ First test ################" << std::endl;
+    for(int i = 0; i<24; i++)
     {
        std:: cout << i << "-" << deck[i].colo << deck[i].fig << "-----" << deck[i].value << std::endl;
     }
 
+	std::cout << "########### Second test #############" << std::endl;
+	Game g = Game(2);
+	g.shuffle();
+	auto gameDeck = g.getShuffledDeck();
+	for(auto i = gameDeck.begin(); i < gameDeck.end(); i++)
+	{
+		std::cout << i->colo << i->fig << std::endl;
+	}
+	std::cout << std::endl;
     return 0;
 }
